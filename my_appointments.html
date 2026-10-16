@@ -1,0 +1,346 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Appointments | MediBook{% endblock %}
+
+{% block content %}
+
+{% set stats = namespace(total=0, upcoming=0, cancelled=0) %}
+
+{% for appointment in appointments %}
+    {% set stats.total = stats.total + 1 %}
+
+    {% if appointment.status == "Cancelled" %}
+        {% set stats.cancelled = stats.cancelled + 1 %}
+    {% elif appointment.appointment_date >= today %}
+        {% set stats.upcoming = stats.upcoming + 1 %}
+    {% endif %}
+{% endfor %}
+
+<style>
+    .appointments-page {
+        padding: 45px 20px;
+    }
+
+    .appointments-card {
+        width: min(1000px, 100%);
+        box-sizing: border-box;
+    }
+
+    .appointments-heading {
+        margin-bottom: 28px;
+    }
+
+    .appointments-heading h1 {
+        margin-bottom: 8px;
+        color: var(--text);
+    }
+
+    .appointments-heading p {
+        color: var(--muted);
+        margin-top: 0;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .summary-card {
+        padding: 22px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.045);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .summary-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #0f766e;
+    }
+
+    .summary-card.upcoming-card::before {
+        background: #0d9488;
+    }
+
+    .summary-card.cancelled-card::before {
+        background: #dc2626;
+    }
+
+    .summary-label {
+        display: block;
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .summary-number {
+        display: block;
+        font-size: 32px;
+        line-height: 1.2;
+        font-weight: 750;
+        color: #0f172a;
+    }
+
+    .summary-note {
+        display: block;
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 8px;
+    }
+
+    .appointments-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+    }
+
+    .appointments-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        min-width: 650px;
+    }
+
+    .appointments-table th {
+        padding: 15px 12px;
+        background: #f0fdfa;
+        color: #115e59;
+        font-size: 13px;
+        font-weight: 700;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .appointments-table td {
+        padding: 16px 12px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+    }
+
+    .appointments-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .appointments-table tbody tr:hover {
+        background: #f8fffe;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-upcoming {
+        background: #ccfbf1;
+        color: #0f766e;
+    }
+
+    .status-past {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .cancel-button {
+        background: #dc2626;
+        color: white;
+        border: 0;
+        border-radius: 8px;
+        padding: 9px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: background 0.2s ease;
+    }
+
+    .cancel-button:hover {
+        background: #b91c1c;
+    }
+
+    .empty-appointments {
+        padding: 35px 15px;
+        text-align: center;
+        background: #f8fffe;
+        border: 1px dashed #99f6e4;
+        border-radius: 14px;
+    }
+
+    .empty-appointments h3 {
+        margin-top: 0;
+        color: #115e59;
+    }
+
+    .empty-appointments p {
+        color: #64748b;
+        margin-bottom: 22px;
+    }
+
+    .appointments-footer {
+        margin-top: 25px;
+    }
+
+    @media (max-width: 650px) {
+        .appointments-page {
+            padding: 25px 12px;
+        }
+
+        .summary-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .summary-card {
+            padding: 18px;
+        }
+
+        .summary-number {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<section class="auth-page appointments-page">
+    <div class="auth-card appointments-card">
+
+        <div class="appointments-heading">
+            <h1>My Appointments</h1>
+            <p>View and manage your doctor appointments.</p>
+        </div>
+
+        <!-- Dashboard Summary Cards -->
+        <div class="summary-grid">
+
+            <div class="summary-card">
+                <span class="summary-label">Total Bookings</span>
+                <span class="summary-number">{{ stats.total }}</span>
+                <span class="summary-note">All your appointments</span>
+            </div>
+
+            <div class="summary-card upcoming-card">
+                <span class="summary-label">Upcoming Appointments</span>
+                <span class="summary-number">{{ stats.upcoming }}</span>
+                <span class="summary-note">Active future bookings</span>
+            </div>
+
+            <div class="summary-card cancelled-card">
+                <span class="summary-label">Cancelled Appointments</span>
+                <span class="summary-number">{{ stats.cancelled }}</span>
+                <span class="summary-note">Appointments you cancelled</span>
+            </div>
+
+        </div>
+
+        {% if appointments %}
+
+            <div class="appointments-table-wrapper">
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Specialty</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for appointment in appointments %}
+                            <tr>
+                                <td>
+                                    <strong>{{ appointment.doctor.name }}</strong>
+                                </td>
+
+                                <td>
+                                    {{ appointment.doctor.specialty }}
+                                </td>
+
+                                <td style="white-space: nowrap;">
+                                    {{ appointment.appointment_date.strftime('%d %b %Y') }}
+                                </td>
+
+                                <td>
+                                    {% if appointment.status == "Cancelled" %}
+                                        <span class="status-badge status-cancelled">
+                                            Cancelled
+                                        </span>
+                                    {% elif appointment.appointment_date < today %}
+                                        <span class="status-badge status-past">
+                                            Past
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge status-upcoming">
+                                            Upcoming
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if appointment.status != "Cancelled" and appointment.appointment_date >= today %}
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('cancel_appointment', appointment_id=appointment.id) }}"
+                                            onsubmit="return confirm('Are you sure you want to cancel this appointment?');"
+                                        >
+                                            <button
+                                                type="submit"
+                                                class="cancel-button"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span style="color: var(--muted); font-size: 12px;">
+                                            No action
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="empty-appointments">
+                <h3>No appointments yet</h3>
+                <p>You haven't booked any appointments with our doctors.</p>
+
+                <a href="{{ url_for('book_page') }}" class="btn">
+                    Book an Appointment
+                </a>
+            </div>
+
+        {% endif %}
+
+        <div class="appointments-footer">
+            <a href="{{ url_for('home') }}" class="auth-link">
+                ← Back to Home
+            </a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+

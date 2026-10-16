@@ -1,0 +1,180 @@
+
+{% extends "base.html" %}
+
+{% block title %}MediBook | Find the Right Doctor{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="eyebrow">YOUR HEALTH, OUR PRIORITY</span>
+
+        <h1>
+            Better healthcare.<br>
+            <span>Made simple.</span>
+        </h1>
+
+        <p class="hero-description">
+            Find the right specialist and book your healthcare
+            appointment with a simple, convenient experience.
+        </p>
+
+        <div class="hero-actions">
+            <a href="{{ url_for('book_page') }}" class="btn btn-primary">
+                Book an Appointment <span aria-hidden="true">→</span>
+            </a>
+
+            <a href="{{ url_for('doctors_page') }}" class="btn btn-secondary">
+                Explore Doctors
+            </a>
+        </div>
+
+        <div class="hero-trust">
+            <span class="trust-icon">✓</span>
+            <span>Simple booking · Specialist directory · Easy access</span>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="health-panel">
+            <div class="health-panel-top">
+                <div class="health-icon-main">
+                    <span>+</span>
+                </div>
+
+                <span class="health-status">
+                    <span class="health-status-dot"></span>
+                    Your care, simplified
+                </span>
+            </div>
+
+            <p class="health-panel-label">WELCOME TO MEDIBOOK</p>
+
+            <h2>Your healthcare journey starts here.</h2>
+
+            <p class="health-panel-description">
+                Find a specialist, choose a suitable date, and manage
+                your appointments in one convenient place.
+            </p>
+
+            <a href="{{ url_for('doctors_page') }}" class="health-feature">
+                <span class="health-feature-icon">01</span>
+                <span class="health-feature-text">
+                    <strong>Explore Specialists</strong>
+                    <small>Browse doctors by specialty</small>
+                </span>
+                <span class="health-feature-arrow">→</span>
+            </a>
+
+            <a href="{{ url_for('book_page') }}" class="health-feature">
+                <span class="health-feature-icon">02</span>
+                <span class="health-feature-text">
+                    <strong>Book with Ease</strong>
+                    <small>Choose an available date</small>
+                </span>
+                <span class="health-feature-arrow">→</span>
+            </a>
+
+            <a href="{{ url_for('my_appointments') }}" class="health-feature">
+                <span class="health-feature-icon">03</span>
+                <span class="health-feature-text">
+                    <strong>Manage Appointments</strong>
+                    <small>Keep track of your bookings</small>
+                </span>
+                <span class="health-feature-arrow">→</span>
+            </a>
+
+            <div class="health-panel-footer">
+                <span class="health-footer-check">✓</span>
+                <span>A simpler approach to healthcare</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="benefits-section">
+    <div class="section-heading">
+        <span class="eyebrow">WHY MEDIBOOK</span>
+        <h2>Healthcare, without the hassle.</h2>
+        <p>A simpler way to take the next step in your healthcare journey.</p>
+    </div>
+
+    <div class="benefits-grid">
+        <article class="benefit-card">
+            <div class="benefit-icon icon-teal">⌕</div>
+            <h3>Find Specialists</h3>
+            <p>Explore doctors across different medical specialties.</p>
+        </article>
+
+        <article class="benefit-card">
+            <div class="benefit-icon icon-blue">▣</div>
+            <h3>Easy Booking</h3>
+            <p>Choose a doctor and submit your preferred appointment date.</p>
+        </article>
+
+        <article class="benefit-card">
+            <div class="benefit-icon icon-purple">♡</div>
+            <h3>Patient-Focused</h3>
+            <p>Enjoy a clear, straightforward appointment booking experience.</p>
+        </article>
+    </div>
+</section>
+
+<section class="doctors-section">
+    <div class="section-heading section-heading-row">
+        <div>
+            <span class="eyebrow">MEET OUR SPECIALISTS</span>
+            <h2>Care from the right experts.</h2>
+            <p>Explore our listed healthcare professionals.</p>
+        </div>
+
+        <a href="{{ url_for('doctors_page') }}" class="text-link">
+            View all doctors →
+        </a>
+    </div>
+
+    <div class="doctor-grid">
+        {% for doctor in doctors %}
+        <article class="doctor-card">
+            <div class="doctor-card-top">
+                <div class="doctor-avatar">
+                    {{ doctor.name.replace('Dr. ', '')[0] }}
+                </div>
+
+                <span class="doctor-badge">Specialist</span>
+            </div>
+
+            <h3>{{ doctor.name }}</h3>
+            <p class="doctor-specialty">{{ doctor.specialty }}</p>
+
+            <div class="doctor-meta">
+                <span>◷ {{ doctor.experience }} years of experience</span>
+                <span>▦ {{ doctor.availability }}</span>
+            </div>
+
+            <a href="{{ url_for('book_page') }}" class="doctor-book-link">
+                Book appointment <span>→</span>
+            </a>
+        </article>
+        {% else %}
+        <div class="empty-state">
+            <h3>Doctors will appear here soon.</h3>
+            <p>Please check back later.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="closing-cta">
+    <div>
+        <span class="eyebrow">TAKE THE NEXT STEP</span>
+        <h2>Your health deserves your attention.</h2>
+        <p>Find a specialist and start with a simple appointment request.</p>
+    </div>
+
+    <a href="{{ url_for('book_page') }}" class="btn btn-light">
+        Book Your Appointment →
+    </a>
+</section>
+
+{% endblock %}

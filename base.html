@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f766e">
+
+    <title>{% block title %}MediBook | Healthcare Appointments{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header class="navbar">
+        <a class="brand" href="{{ url_for('home') }}">
+            <span class="brand-icon">+</span>
+            MediBook
+        </a>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+
+            <a href="{{ url_for('doctors_page') }}">Our Doctors</a>
+
+            {% if current_user.is_authenticated %}
+                <a class="nav-cta" href="{{ url_for('book_page') }}">
+                    Book Appointment
+                </a>
+
+                <a href="{{ url_for('my_appointments') }}">
+                    My Appointments
+                </a>
+
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="nav-cta" href="{{ url_for('book_page') }}">
+                    Book Appointment
+                </a>
+
+                <a href="{{ url_for('login') }}">Login</a>
+
+                <a class="nav-cta" href="{{ url_for('signup') }}">
+                    Sign Up
+                </a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="status">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <a class="brand footer-brand" href="{{ url_for('home') }}">
+            <span class="brand-icon">+</span>
+            MediBook
+        </a>
+
+        <p>Healthcare appointments, made simpler.</p>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 MediBook. All rights reserved.</span>
+            <a href="{{ url_for('doctors_page') }}">Find a Doctor</a>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,124 @@
+
+{% extends "base.html" %}
+
+{% block title %}Book an Appointment | MediBook{% endblock %}
+
+{% block content %}
+
+<section class="booking-page">
+    <div class="booking-intro">
+        <span class="eyebrow">YOUR HEALTH JOURNEY STARTS HERE</span>
+
+        <h1>Book your<br><span>appointment.</span></h1>
+
+        <p>
+            Complete the form to submit your appointment request.
+            Please check your details before continuing.
+        </p>
+
+        <div class="booking-benefit">
+            <span class="benefit-check">✓</span>
+            <div>
+                <strong>Simple booking process</strong>
+                <p>Enter your details and choose a listed doctor.</p>
+            </div>
+        </div>
+
+        <div class="booking-benefit">
+            <span class="benefit-check">✓</span>
+            <div>
+                <strong>Choose your preferred date</strong>
+                <p>Select today or a future date for your request.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="booking-form-card">
+        <div class="form-heading">
+            <span class="form-heading-icon">+</span>
+            <div>
+                <h2>Appointment details</h2>
+                <p>Fill in the information below.</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('book_page') }}">
+            <div class="form-group">
+                <label for="patient_name">Patient's full name</label>
+
+                <input
+                    type="text"
+                    id="patient_name"
+                    name="patient_name"
+                    value="{{ current_user.name }}"
+                    maxlength="100"
+                    autocomplete="name"
+                    readonly
+                    required
+                >
+
+                <p class="field-note">
+                    This name comes from your patient account.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor_id">Choose a doctor</label>
+
+                <select id="doctor_id" name="doctor_id" required>
+                    <option value="">Select a specialist</option>
+
+                    {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}">
+                        {{ doctor.name }} — {{ doctor.specialty }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                {% if not doctors %}
+                <p class="field-note">
+                    No doctors are currently listed. Please try again later.
+                </p>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_date">Preferred appointment date</label>
+
+                <input
+                    type="date"
+                    id="appointment_date"
+                    name="appointment_date"
+                    min="{{ today }}"
+                    required
+                >
+
+                <p class="field-note">
+                    Please select today or a future date.
+                </p>
+            </div>
+
+            <div class="form-notice">
+                <span>ⓘ</span>
+                <p>
+                    Your request will be saved after you submit the form.
+                    This prototype does not yet provide appointment time slots.
+                </p>
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary form-submit"
+                {% if not doctors %}disabled{% endif %}
+            >
+                Submit Appointment Request →
+            </button>
+
+            <a href="{{ url_for('doctors_page') }}" class="form-back-link">
+                ← Browse all doctors
+            </a>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

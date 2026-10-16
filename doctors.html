@@ -1,0 +1,113 @@
+
+{% extends "base.html" %}
+
+{% block title %}Our Doctors | MediBook{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <div class="page-hero-content">
+        <span class="eyebrow">OUR MEDICAL TEAM</span>
+
+        <h1>
+            Meet your healthcare<br>
+            <span>specialists.</span>
+        </h1>
+
+        <p>
+            Explore our listed doctors and choose a specialist
+            for your healthcare appointment.
+        </p>
+
+        <div class="page-hero-actions">
+            <a href="{{ url_for('book_page') }}" class="btn btn-primary">
+                Book an Appointment →
+            </a>
+
+            <a href="{{ url_for('home') }}" class="text-link">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+
+    <div class="page-hero-decoration">
+        <div class="decoration-circle">
+            <span>+</span>
+        </div>
+        <div class="decoration-caption">
+            <span class="status-dot"></span>
+            <span>Find the right specialist</span>
+        </div>
+    </div>
+</section>
+
+<section class="doctors-section all-doctors-section">
+    <div class="section-heading section-heading-row">
+        <div>
+            <span class="eyebrow">DOCTOR DIRECTORY</span>
+            <h2>Explore our doctors</h2>
+            <p>Review the available specialist profiles below.</p>
+        </div>
+
+        <span class="doctor-count">
+            {{ doctors|length }} doctors listed
+        </span>
+    </div>
+
+    <div class="doctor-grid">
+        {% for doctor in doctors %}
+        <article class="doctor-card">
+            <div class="doctor-card-top">
+                <div class="doctor-avatar">
+                    {{ doctor.name.replace('Dr. ', '')[0] }}
+                </div>
+
+                <span class="doctor-badge">Specialist</span>
+            </div>
+
+            <h3>{{ doctor.name }}</h3>
+
+            <p class="doctor-specialty">
+                {{ doctor.specialty }}
+            </p>
+
+            <div class="doctor-divider"></div>
+
+            <div class="doctor-meta">
+                <span>
+                    <strong>Experience</strong>
+                    {{ doctor.experience }} years
+                </span>
+
+                <span>
+                    <strong>Availability</strong>
+                    {{ doctor.availability }}
+                </span>
+            </div>
+
+            <a href="{{ url_for('book_page') }}" class="doctor-book-link">
+                Book appointment <span>→</span>
+            </a>
+        </article>
+        {% else %}
+        <div class="empty-state">
+            <h3>No doctors are listed yet.</h3>
+            <p>Please check back later.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="closing-cta">
+    <div>
+        <span class="eyebrow">READY TO GET STARTED?</span>
+        <h2>Make time for your health.</h2>
+        <p>Choose a doctor and submit your appointment request.</p>
+    </div>
+
+    <a href="{{ url_for('book_page') }}" class="btn btn-light">
+        Book an Appointment →
+    </a>
+</section>
+
+{% endblock %}
