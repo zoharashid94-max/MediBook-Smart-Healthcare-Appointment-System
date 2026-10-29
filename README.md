@@ -1,4 +1,4 @@
-# MediBook - Smart Healthcare Appointment System
+# MediBook Smart Healthcare Appointment System
 
 MediBook is a healthcare appointment website that I developed as a Computer Science project. I built it to learn how a web application works and how different features can be connected to make a useful system.
 
